@@ -10,21 +10,30 @@ import javax.sql.DataSource;
 
 @SpringBootApplication
 @Log
-public class DbAppApplication implements CommandLineRunner {
-    private DataSource dataSource;
-
-    public DbAppApplication(DataSource db) {
-        this.dataSource = db;
-    }
-
+public class DbAppApplication {
     public static void main(String[] args) {
         SpringApplication.run(DbAppApplication.class, args);
     }
-
-    @Override
-    public void run(String... args) throws Exception {
-        log.info("Database: " + dataSource.toString());
-        final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
-        restTemplate.execute("select 1");
-    }
 }
+
+//
+//@SpringBootApplication
+//@Log
+//public class DbAppApplication implements CommandLineRunner {
+//    private DataSource dataSource;
+//
+//    public DbAppApplication(DataSource db) {
+//        this.dataSource = db;
+//    }
+//
+//    public static void main(String[] args) {
+//        SpringApplication.run(DbAppApplication.class, args);
+//    }
+//
+//    @Override
+//    public void run(String... args) throws Exception {
+//        log.info("Database: " + dataSource.toString());
+//        final JdbcTemplate restTemplate = new JdbcTemplate(dataSource);
+//        restTemplate.execute("select 1");
+//    }
+//}
