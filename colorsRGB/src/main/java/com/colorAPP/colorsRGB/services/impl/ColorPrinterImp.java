@@ -1,11 +1,12 @@
 package com.colorAPP.colorsRGB.services.impl;
 
-import ch.qos.logback.core.pattern.color.BoldBlueCompositeConverter;
 import com.colorAPP.colorsRGB.services.BluePrinter;
 import com.colorAPP.colorsRGB.services.ColorPrinter;
 import com.colorAPP.colorsRGB.services.GreenPrinter;
 import com.colorAPP.colorsRGB.services.RedPrinter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ColorPrinterImp implements ColorPrinter {
     private RedPrinter redPrinter;
     private GreenPrinter greenPrinter;
