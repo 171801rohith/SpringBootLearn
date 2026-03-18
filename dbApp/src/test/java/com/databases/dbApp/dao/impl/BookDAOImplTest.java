@@ -1,5 +1,7 @@
 package com.databases.dbApp.dao.impl;
 
+import com.databases.dbApp.TestDataUtil;
+import com.databases.dbApp.domain.Author;
 import com.databases.dbApp.domain.Book;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,11 +24,7 @@ public class BookDAOImplTest {
 
     @Test
     public void testThatCreateBookGeneratesCorrectSql() {
-        Book book = Book.builder()
-                .isbn("B1")
-                .title("B1")
-                .authorId(1)
-                .build();
+        Book book = TestDataUtil.createBook();
 
         underTest.create(book);
 
@@ -47,4 +45,36 @@ public class BookDAOImplTest {
                 eq("B1")
         );
     }
+
+    @Test
+    public void testThatFindManyBookGeneratesCorrectSql() {
+        underTest.find();
+
+        verify(jdbcTemplate).query(
+                eq("SELECT isbn, title, author_id FROM books"),
+                ArgumentMatchers.<BookDAOImpl.BookMapper>any()
+        );
+    }
+
+    @Test
+    public  void testThatFullUpdateBookGeneratesCorrectSql() {
+        Book book = TestDataUtil.createBook();
+        underTest.update(book);
+
+        verify(jdbcTemplate).update(
+                eq("UPDATE books SET isbn = ?, title = ?, author_id = ? WHERE isbn = ?"),
+                eq("B67"), eq("B56"), eq(1), eq("B67")
+        );
+    }
+    @Test
+    public  void testThatDeleteBookGeneratesCorrectSql() {
+        Book book = TestDataUtil.createBook();
+        underTest.delete(book.getIsbn());
+
+        verify(jdbcTemplate).update(
+                eq("DELETE FROM books WHERE isbn = ?"),
+                eq("B67")
+        );
+    }
+
 }
