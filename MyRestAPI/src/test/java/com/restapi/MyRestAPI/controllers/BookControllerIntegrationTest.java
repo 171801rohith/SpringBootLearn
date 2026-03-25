@@ -70,4 +70,13 @@ public class BookControllerIntegrationTest {
                 MockMvcResultMatchers.status().isOk()
         );
     }
+
+    @Test
+    public void testThatGetBookByIdCorrectlyRespondsWithHttp404() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books/B1")
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
 }

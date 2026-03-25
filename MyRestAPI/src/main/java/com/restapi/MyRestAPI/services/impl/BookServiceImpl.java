@@ -8,6 +8,7 @@ import com.restapi.MyRestAPI.services.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -32,5 +33,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll().stream()
                 .map(bookMapper::mapTo)
                 .toList();
+    }
+
+    @Override
+    public Optional<BookDTO> getBookByIsbn(String isbn) {
+        Optional<BookEntity> book = bookRepository.findById(isbn);
+        return book.map(bookMapper::mapTo);
     }
 }

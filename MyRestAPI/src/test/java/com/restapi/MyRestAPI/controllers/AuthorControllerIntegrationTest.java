@@ -75,4 +75,13 @@ public class AuthorControllerIntegrationTest {
                 MockMvcResultMatchers.status().isOk()
         );
     }
+
+    @Test
+    public void testThatGetAuthorByIdCorrectlyRespondsWithHttp404() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors/1")
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
 }

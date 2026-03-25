@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -38,5 +39,11 @@ public class AuthorServiceImpl implements AuthorService {
         return authorEntities.stream()
                 .map(authorMapper::mapTo)
                 .toList();
+    }
+
+    @Override
+    public Optional<AuthorDTO> getAuthorById(Integer id) {
+        Optional<AuthorEntity> author = authorRepository.findById(id);
+        return author.map(authorMapper::mapTo);
     }
 }
