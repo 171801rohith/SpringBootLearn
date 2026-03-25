@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restapi.MyRestAPI.TestDataUtil;
 import com.restapi.MyRestAPI.domain.dto.BookDTO;
 import com.restapi.MyRestAPI.domain.entities.BookEntity;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
+@Transactional
 public class BookControllerIntegrationTest {
     private ObjectMapper objectMapper;
     private MockMvc mockMvc;
@@ -32,7 +33,7 @@ public class BookControllerIntegrationTest {
     }
 
     @Test
-    public void TestThatCreateBookRespondsWithCorrectStatus201() throws Exception {
+    public void testThatCreateBookRespondsWithCorrectStatus201() throws Exception {
         BookDTO testBook = TestDataUtil.createBookDTOTest(null);
         String bookJson = objectMapper.writeValueAsString(testBook);
 
@@ -46,7 +47,7 @@ public class BookControllerIntegrationTest {
     }
 
     @Test
-    public void TestThatCreateBookRespondsWithCorrectBook() throws Exception {
+    public void testThatCreateBookRespondsWithCorrectBook() throws Exception {
         BookDTO testBook = TestDataUtil.createBookDTOTest(null);
         String bookJson = objectMapper.writeValueAsString(testBook);
 
@@ -58,6 +59,15 @@ public class BookControllerIntegrationTest {
                 MockMvcResultMatchers.jsonPath("$.title").isString()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.isbn").isString()
+        );
+    }
+
+    @Test
+    public void testThatGetAllBooksCorrectlyRespondsWith200() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/books")
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
         );
     }
 }

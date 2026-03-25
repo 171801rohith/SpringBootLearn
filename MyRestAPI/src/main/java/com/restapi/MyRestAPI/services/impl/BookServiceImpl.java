@@ -1,22 +1,36 @@
 package com.restapi.MyRestAPI.services.impl;
 
+import com.restapi.MyRestAPI.domain.dto.BookDTO;
 import com.restapi.MyRestAPI.domain.entities.BookEntity;
+import com.restapi.MyRestAPI.mappers.Mapper;
 import com.restapi.MyRestAPI.repositories.BookRepository;
 import com.restapi.MyRestAPI.services.BookService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private BookRepository bookRepository;
+    private Mapper<BookEntity, BookDTO> bookMapper;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository, Mapper<BookEntity, BookDTO> bookMapper) {
         this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
     }
 
     @Override
-    public BookEntity createBook(String isbn, BookEntity bookEntity) {
+    public BookDTO createBook(String isbn, BookDTO book) {
+        BookEntity bookEntity = bookMapper.mapFrom(book);
         bookEntity.setIsbn(isbn);
-        return bookRepository.save(bookEntity);
+        return bookMapper.mapTo(bookRepository.save(bookEntity));
+    }
+
+    @Override
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::mapTo)
+                .toList();
     }
 }

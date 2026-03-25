@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restapi.MyRestAPI.TestDataUtil;
 import com.restapi.MyRestAPI.domain.entities.AuthorEntity;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
+@Transactional
 public class AuthorControllerIntegrationTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -60,9 +61,18 @@ public class AuthorControllerIntegrationTest {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").isString()
+                MockMvcResultMatchers.jsonPath("$.name").value(testAuthor.getName())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.age").isNumber()
+                MockMvcResultMatchers.jsonPath("$.age").value(testAuthor.getAge())
+        );
+    }
+
+    @Test
+    public void testThatGetAllAuthorsCorrectlyRespondsWithHttp200() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.get("/authors")
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
         );
     }
 }
