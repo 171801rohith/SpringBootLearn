@@ -1,9 +1,8 @@
 package com.restapi.MyRestAPI.controllers;
 
-import com.restapi.MyRestAPI.domain.entities.AuthorEntity;
 import com.restapi.MyRestAPI.domain.dto.AuthorDTO;
-import com.restapi.MyRestAPI.mappers.Mapper;
 import com.restapi.MyRestAPI.services.AuthorService;
+import jakarta.persistence.Id;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +21,7 @@ public class AuthorController {
 
     @PostMapping(path = "/authors")
     public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
-        return new ResponseEntity<>(authorService.createAuthor(authorDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(authorService.saveAuthor(authorDTO), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/authors")
@@ -44,6 +43,18 @@ public class AuthorController {
     public ResponseEntity<Void> deleteAuthorById(@PathVariable("id") Integer id) {
         authorService.deleteAuthorById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(path = "/authors/{id}")
+    public ResponseEntity<AuthorDTO> fullUpdateAuthorById(
+            @PathVariable("id") Integer id,
+            @RequestBody AuthorDTO authorDTO) {
+
+        if (!authorService.isExists(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        authorDTO.setId(id);
+        return ResponseEntity.ok(authorService.saveAuthor(authorDTO));
     }
 
 }

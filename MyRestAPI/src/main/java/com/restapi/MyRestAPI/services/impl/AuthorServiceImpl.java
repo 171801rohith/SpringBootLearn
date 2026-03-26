@@ -25,7 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO createAuthor(AuthorDTO author) {
+    public AuthorDTO saveAuthor(AuthorDTO author) {
         AuthorEntity authorEntity = authorMapper.mapFrom(author);
         AuthorEntity savedAuthorEntity = authorRepository.save(authorEntity);
 
@@ -50,5 +50,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void deleteAuthorById(Integer id) {
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean isExists(Integer id) {
+        return authorRepository.existsById(id);
     }
 }

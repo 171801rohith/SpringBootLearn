@@ -22,7 +22,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO createBook(String isbn, BookDTO book) {
+    public BookDTO saveBook(String isbn, BookDTO book) {
         BookEntity bookEntity = bookMapper.mapFrom(book);
         bookEntity.setIsbn(isbn);
         return bookMapper.mapTo(bookRepository.save(bookEntity));
@@ -44,5 +44,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBookByIsbn(String isbn) {
         bookRepository.deleteById(isbn);
+    }
+
+    @Override
+    public boolean isExists(String isbn) {
+        return bookRepository.existsById(isbn);
     }
 }
