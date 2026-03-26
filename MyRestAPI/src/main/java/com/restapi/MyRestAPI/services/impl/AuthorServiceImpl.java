@@ -46,4 +46,9 @@ public class AuthorServiceImpl implements AuthorService {
         Optional<AuthorEntity> author = authorRepository.findById(id);
         return author.map(authorMapper::mapTo);
     }
+
+    @Override
+    public void deleteAuthorById(Integer id) {
+        authorRepository.deleteById(id);
+    }
 }

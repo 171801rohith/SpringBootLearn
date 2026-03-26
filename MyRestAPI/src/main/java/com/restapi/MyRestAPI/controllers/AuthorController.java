@@ -37,8 +37,13 @@ public class AuthorController {
 
 //        if (author.isPresent()) return ResponseEntity.ok(author.get());
 //        else return ResponseEntity.notFound().build();
-
         return author.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping(path = "/authors/{id}")
+    public ResponseEntity<Void> deleteAuthorById(@PathVariable("id") Integer id) {
+        authorService.deleteAuthorById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

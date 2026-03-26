@@ -13,4 +13,6 @@ public interface AuthorService {
     List<AuthorDTO> getAllAuthors();
 
     Optional<AuthorDTO> getAuthorById(Integer id);
+
+    void deleteAuthorById(Integer id);
 }

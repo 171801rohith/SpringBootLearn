@@ -40,4 +40,9 @@ public class BookServiceImpl implements BookService {
         Optional<BookEntity> book = bookRepository.findById(isbn);
         return book.map(bookMapper::mapTo);
     }
+
+    @Override
+    public void deleteBookByIsbn(String isbn) {
+        bookRepository.deleteById(isbn);
+    }
 }

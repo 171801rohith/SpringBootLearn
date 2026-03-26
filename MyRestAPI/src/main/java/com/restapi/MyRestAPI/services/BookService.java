@@ -14,4 +14,5 @@ public interface BookService {
 
     Optional<BookDTO> getBookByIsbn(String isbn);
 
+    void deleteBookByIsbn(String isbn);
 }

@@ -38,4 +38,11 @@ public class BookController {
         return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping(path = "/books/{isbn}")
+    public ResponseEntity<Void> deleteBookByIsbn(@PathVariable("isbn") String isbn) {
+        bookService.deleteBookByIsbn(isbn);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
