@@ -79,4 +79,13 @@ public class BookControllerIntegrationTest {
                 MockMvcResultMatchers.status().isNotFound()
         );
     }
+
+    @Test
+    public void testThatDeleteBookByIdCorrectlyRespondsWithHttp204() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/books/1")
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }

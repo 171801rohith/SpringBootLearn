@@ -84,4 +84,13 @@ public class AuthorControllerIntegrationTest {
                 MockMvcResultMatchers.status().isNotFound()
         );
     }
+
+    @Test
+    public void testThatDeleteAuthorByIdCorrectlyRespondsWithHttp204() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/authors/1")
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }
