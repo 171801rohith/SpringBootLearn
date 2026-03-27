@@ -16,4 +16,6 @@ public interface AuthorService {
     void deleteAuthorById(Integer id);
 
     boolean isExists(Integer id);
+
+    AuthorDTO partialUpdateAuthorById(Integer id, AuthorDTO authorDTO);
 }

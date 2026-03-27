@@ -56,4 +56,20 @@ public class AuthorServiceImpl implements AuthorService {
     public boolean isExists(Integer id) {
         return authorRepository.existsById(id);
     }
+
+    @Override
+    public AuthorDTO partialUpdateAuthorById(Integer id, AuthorDTO authorDTO) {
+        AuthorEntity authorEntity = authorMapper.mapFrom(authorDTO);
+        authorEntity.setId(id);
+
+        AuthorEntity entity = authorRepository.findById(id).map(
+                existingAuthor -> {
+                    Optional.ofNullable(authorEntity.getName()).ifPresent(existingAuthor::setName);
+                    Optional.ofNullable(authorEntity.getAge()).ifPresent(existingAuthor::setAge);
+                    return authorRepository.save(existingAuthor);
+                }
+        ).orElseThrow(() -> new RuntimeException("Author Not exists"));
+
+        return authorMapper.mapTo(entity);
+    }
 }

@@ -15,4 +15,6 @@ public interface BookService {
     void deleteBookByIsbn(String isbn);
 
     boolean isExists(String isbn);
+
+    BookDTO partialUpdateBookByIsbn(String isbn, BookDTO bookDTO);
 }

@@ -31,7 +31,7 @@ public class AuthorController {
     }
 
     @GetMapping(path = "/authors/{id}")
-    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable("id") Integer id) {
+    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable Integer id) {
         Optional<AuthorDTO> author = authorService.getAuthorById(id);
 
 //        if (author.isPresent()) return ResponseEntity.ok(author.get());
@@ -40,14 +40,14 @@ public class AuthorController {
     }
 
     @DeleteMapping(path = "/authors/{id}")
-    public ResponseEntity<Void> deleteAuthorById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteAuthorById(@PathVariable Integer id) {
         authorService.deleteAuthorById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(path = "/authors/{id}")
     public ResponseEntity<AuthorDTO> fullUpdateAuthorById(
-            @PathVariable("id") Integer id,
+            @PathVariable Integer id,
             @RequestBody AuthorDTO authorDTO) {
 
         if (!authorService.isExists(id)) {
@@ -55,6 +55,18 @@ public class AuthorController {
         }
         authorDTO.setId(id);
         return ResponseEntity.ok(authorService.saveAuthor(authorDTO));
+    }
+
+    @PatchMapping(path = "/authors/{id}")
+    public ResponseEntity<AuthorDTO> partialUpdateAuthorById(
+            @PathVariable Integer id,
+            @RequestBody AuthorDTO authorDTO) {
+
+        if (!authorService.isExists(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        authorDTO.setId(id);
+        return ResponseEntity.ok(authorService.partialUpdateAuthorById(id, authorDTO));
     }
 
 }
