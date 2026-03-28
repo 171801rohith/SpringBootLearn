@@ -1,10 +1,14 @@
 package com.restapi.MyRestAPI.services.impl;
 
 import com.restapi.MyRestAPI.domain.dto.AuthorDTO;
+import com.restapi.MyRestAPI.domain.dto.PaginatedResponseDTO;
 import com.restapi.MyRestAPI.domain.entities.AuthorEntity;
 import com.restapi.MyRestAPI.mappers.Mapper;
 import com.restapi.MyRestAPI.repositories.AuthorRepository;
+import com.restapi.MyRestAPI.repositories.BookRepository;
 import com.restapi.MyRestAPI.services.AuthorService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ public class AuthorServiceImpl implements AuthorService {
     private Mapper<AuthorEntity, AuthorDTO> authorMapper;
 
 
-    public AuthorServiceImpl(AuthorRepository authorRepository, Mapper<AuthorEntity, AuthorDTO> authorMapper) {
+    public AuthorServiceImpl(AuthorRepository authorRepository, Mapper<AuthorEntity, AuthorDTO> authorMapper, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
         this.authorMapper = authorMapper;
 
@@ -39,6 +43,18 @@ public class AuthorServiceImpl implements AuthorService {
         return authorEntities.stream()
                 .map(authorMapper::mapTo)
                 .toList();
+    }
+
+    @Override
+    public PaginatedResponseDTO<AuthorDTO> getAllAuthors(Pageable pageable) {
+        Page<AuthorDTO> page = authorRepository.findAll(pageable).map(authorMapper::mapTo);
+        return PaginatedResponseDTO.<AuthorDTO>builder()
+                .content(page.getContent())
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .build();
     }
 
     @Override

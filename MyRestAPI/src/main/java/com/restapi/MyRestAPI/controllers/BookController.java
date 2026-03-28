@@ -2,6 +2,8 @@ package com.restapi.MyRestAPI.controllers;
 
 import com.restapi.MyRestAPI.domain.dto.BookDTO;
 import com.restapi.MyRestAPI.services.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +27,14 @@ public class BookController {
         return new ResponseEntity<>(bookService.saveBook(isbn, bookDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/books")
+    @GetMapping(path = "/books/all")
     public ResponseEntity<List<BookDTO>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
+    }
+
+    @GetMapping(path = "/books")
+    public ResponseEntity<Page<BookDTO>> getBooksPaginated(Pageable pageable) {
+        return ResponseEntity.ok(bookService.getAllBooks(pageable));
     }
 
     @GetMapping(path = "/books/{isbn}")

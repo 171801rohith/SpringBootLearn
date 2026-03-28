@@ -5,6 +5,8 @@ import com.restapi.MyRestAPI.domain.entities.BookEntity;
 import com.restapi.MyRestAPI.mappers.Mapper;
 import com.restapi.MyRestAPI.repositories.BookRepository;
 import com.restapi.MyRestAPI.services.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +35,11 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll().stream()
                 .map(bookMapper::mapTo)
                 .toList();
+    }
+
+    @Override
+    public Page<BookDTO> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable).map(bookMapper::mapTo);
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.restapi.MyRestAPI.controllers;
 
 import com.restapi.MyRestAPI.domain.dto.AuthorDTO;
+import com.restapi.MyRestAPI.domain.dto.PaginatedResponseDTO;
 import com.restapi.MyRestAPI.services.AuthorService;
-import jakarta.persistence.Id;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +26,15 @@ public class AuthorController {
         return new ResponseEntity<>(authorService.saveAuthor(authorDTO), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/authors")
+    @GetMapping(path = "/authors/all")
     public ResponseEntity<List<AuthorDTO>> getAllAuthors() {
         List<AuthorDTO> authors = authorService.getAllAuthors();
+        return ResponseEntity.ok(authors);
+    }
+
+    @GetMapping(path = "/authors")
+    public ResponseEntity<PaginatedResponseDTO<AuthorDTO>> getAuthorsPaginated(Pageable pageable) {
+        PaginatedResponseDTO<AuthorDTO> authors = authorService.getAllAuthors(pageable);
         return ResponseEntity.ok(authors);
     }
 
