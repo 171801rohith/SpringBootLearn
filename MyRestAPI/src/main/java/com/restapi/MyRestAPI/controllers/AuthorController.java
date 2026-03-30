@@ -3,6 +3,7 @@ package com.restapi.MyRestAPI.controllers;
 import com.restapi.MyRestAPI.domain.dto.AuthorDTO;
 import com.restapi.MyRestAPI.domain.dto.PaginatedResponseDTO;
 import com.restapi.MyRestAPI.services.AuthorService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class AuthorController {
     }
 
     @PostMapping(path = "/authors")
-    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO authorDTO) {
+    public ResponseEntity<AuthorDTO> createAuthor(@Valid @RequestBody AuthorDTO authorDTO) {
         return new ResponseEntity<>(authorService.saveAuthor(authorDTO), HttpStatus.CREATED);
     }
 
@@ -38,13 +39,19 @@ public class AuthorController {
         return ResponseEntity.ok(authors);
     }
 
+//    @GetMapping(path = "/authors/{id}")
+//    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable Integer id) {
+//        Optional<AuthorDTO> author = authorService.getAuthorById(id);
+//
+
+    /// /        if (author.isPresent()) return ResponseEntity.ok(author.get());
+    /// /        else return ResponseEntity.notFound().build();
+//        return author.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+//    }
     @GetMapping(path = "/authors/{id}")
     public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable Integer id) {
-        Optional<AuthorDTO> author = authorService.getAuthorById(id);
-
-//        if (author.isPresent()) return ResponseEntity.ok(author.get());
-//        else return ResponseEntity.notFound().build();
-        return author.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        AuthorDTO author = authorService.getAuthorById(id);
+        return ResponseEntity.ok(author);
     }
 
     @DeleteMapping(path = "/authors/{id}")
@@ -56,7 +63,7 @@ public class AuthorController {
     @PutMapping(path = "/authors/{id}")
     public ResponseEntity<AuthorDTO> fullUpdateAuthorById(
             @PathVariable Integer id,
-            @RequestBody AuthorDTO authorDTO) {
+            @Valid @RequestBody AuthorDTO authorDTO) {
 
         if (!authorService.isExists(id)) {
             return ResponseEntity.notFound().build();
@@ -68,7 +75,7 @@ public class AuthorController {
     @PatchMapping(path = "/authors/{id}")
     public ResponseEntity<AuthorDTO> partialUpdateAuthorById(
             @PathVariable Integer id,
-            @RequestBody AuthorDTO authorDTO) {
+            @Valid @RequestBody AuthorDTO authorDTO) {
 
         if (!authorService.isExists(id)) {
             return ResponseEntity.notFound().build();

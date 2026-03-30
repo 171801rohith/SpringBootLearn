@@ -16,7 +16,7 @@ public interface AuthorService {
 
     PaginatedResponseDTO<AuthorDTO> getAllAuthors(Pageable pageable);
 
-    Optional<AuthorDTO> getAuthorById(Integer id);
+    AuthorDTO getAuthorById(Integer id);
 
     void deleteAuthorById(Integer id);
 

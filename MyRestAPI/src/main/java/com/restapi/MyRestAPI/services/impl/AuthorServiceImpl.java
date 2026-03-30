@@ -3,6 +3,7 @@ package com.restapi.MyRestAPI.services.impl;
 import com.restapi.MyRestAPI.domain.dto.AuthorDTO;
 import com.restapi.MyRestAPI.domain.dto.PaginatedResponseDTO;
 import com.restapi.MyRestAPI.domain.entities.AuthorEntity;
+import com.restapi.MyRestAPI.exceptions.AuthorNotFoundException;
 import com.restapi.MyRestAPI.mappers.Mapper;
 import com.restapi.MyRestAPI.repositories.AuthorRepository;
 import com.restapi.MyRestAPI.repositories.BookRepository;
@@ -58,9 +59,10 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Optional<AuthorDTO> getAuthorById(Integer id) {
+    public AuthorDTO getAuthorById(Integer id) {
         Optional<AuthorEntity> author = authorRepository.findById(id);
-        return author.map(authorMapper::mapTo);
+        return author.map(authorMapper::mapTo)
+                .orElseThrow(() -> new AuthorNotFoundException(id));
     }
 
     @Override
@@ -84,7 +86,7 @@ public class AuthorServiceImpl implements AuthorService {
                     Optional.ofNullable(authorEntity.getAge()).ifPresent(existingAuthor::setAge);
                     return authorRepository.save(existingAuthor);
                 }
-        ).orElseThrow(() -> new RuntimeException("Author Not exists"));
+        ).orElseThrow(() -> new AuthorNotFoundException(id));
 
         return authorMapper.mapTo(entity);
     }
