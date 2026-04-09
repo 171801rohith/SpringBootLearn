@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: security
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/SpringSecurity
+    username: postgres
+    password: diwa123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: 3cd82572d2e80bfe3d35c352716f42c8e5309ef92b38e5c7ea931490a6c5297a
